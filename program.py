@@ -10,7 +10,7 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 import pytesseract as ptsr
-import openpyxl
+import openpyxl as px
 
 ptsr.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
