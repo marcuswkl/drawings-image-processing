@@ -1,5 +1,4 @@
 def execute():
-    print("Requirement 2 Code")
     import cv2
     import numpy as np
     from matplotlib import pyplot as pt 
@@ -16,7 +15,7 @@ def execute():
          
         #read image 
         img_number = img_num + ".png" 
-        img_extra = cv2.imread(Dataset/img_number, cv2.IMREAD_GRAYSCALE) 
+        img_extra = cv2.imread(dataset/img_number, cv2.IMREAD_GRAYSCALE) 
          
         #convert image to grayscale 
         thresh = 128 
