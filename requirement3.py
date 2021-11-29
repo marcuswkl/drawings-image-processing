@@ -33,18 +33,6 @@ for columns in range(5,wImg):
 drawing = img[4:3149,4:table_edge]
 drawing_resize = cv2.resize(drawing, (328, 629))
 
-for rows in range(5,hImg):
-    number_of_pixel = 0
-    table_top = 0
-    for columns in range(table_edge,wImg):
-        if img[rows, columns] == 0:
-            number_of_pixel = number_of_pixel + 1
-    if number_of_pixel >= (0.75*(wImg-table_edge)):
-        table_top = rows
-        break
-
-table = img[table_top:3153, table_edge:2403]
-
 cv2.imshow("Only Drawing (Extracted)", drawing_resize)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
