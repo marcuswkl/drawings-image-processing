@@ -16,7 +16,7 @@ def execute():
          
         #read image 
         img_number = img_num + ".png" 
-        img_extra = cv2.imread(Dataset_2021/img_number, cv2.IMREAD_GRAYSCALE) 
+        img_extra = cv2.imread(Dataset/img_number, cv2.IMREAD_GRAYSCALE) 
          
         #convert image to grayscale 
         thresh = 128 
@@ -95,11 +95,4 @@ def execute():
         ws = wb['Status']
         ws.append([str(n),'Status:',content])
         wb.save('DIP assignment.xlsx')
-    # ws = wb.active 
-    # ws.title = "Drawing Number" 
-    # current_data = 'A' + str(n) 
-    # current_drawing = 'B' + str(n) 
-    # drawing_num = "drawing_" + str(n) + ".png" 
-    # ws[current_drawing] = drawing_number 
-    # ws[current_data] = str(n) 
-    # wb.save('DIP assignment.xlsx')
+
