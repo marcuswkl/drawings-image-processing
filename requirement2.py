@@ -23,8 +23,8 @@ def execute():
             img_num = str(n) 
          
         #read image 
-        img_number = img_num + ".png" 
-        img_extra = cv2.imread(dataset/img_number, cv2.IMREAD_GRAYSCALE) 
+        img_number = "dataset/" + img_num + ".png" 
+        img_extra = cv2.imread(img_number, cv2.IMREAD_GRAYSCALE) 
          
         #convert image to grayscale 
         thresh = 128 
