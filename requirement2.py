@@ -1,11 +1,20 @@
+# CSC2014: Digital Imaging Processing
+# Coursework / Assignment 2021
+# Group Members:
+# 1. Marcus Wong Ke Lun 18126672
+# 2. Ko Jia Xin 17102674
+# 3. Seow Yee Ying 18047449
+# 4. Thum Yong Jie 19023233
+
+import cv2
+import numpy as np
+from matplotlib import pyplot as pt 
+import pytesseract as tess
+from openpyxl import Workbook, load_workbook
+
+tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
 def execute():
-    import cv2
-    import numpy as np
-    from matplotlib import pyplot as pt 
-    import pytesseract as tess
-    from openpyxl import Workbook, load_workbook
-    
-    tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
     
     for n in range(1,21): 
         if n < 10: 
