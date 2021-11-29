@@ -16,11 +16,11 @@ requirement1.execute()
 
 # Requirement 2
 # Able to also extract other information (e.g. drawing title, author, status, etc.) from the title block and save them into an Excel file. The contents should match with the respective field titles extracted from the engineering drawing.
-# requirement2.execute()
+requirement2.execute()
 
 # Requirement 3
 # Able to identify and extract the drawing (only the drawing) and save it into a separate image file with .png extension.
-# requirement3.execute()
+requirement3.execute()
 
 # Requirement 4
 # Able to handle an additional engineering drawing with layout design not known to you (will not be “very different” from the engineering drawings given to you).
