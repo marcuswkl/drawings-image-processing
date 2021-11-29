@@ -103,7 +103,7 @@ for columns in range(5,wImg):
         table_edge = columns
         break
     
-drawing = img[4:3149,4:table_edge]
+drawing = img[4:3149,4:2370]
 drawing_resize = cv2.resize(drawing, (680, 798))
 
 cv2.imshow("Only Drawing (Extracted)", drawing_resize)
