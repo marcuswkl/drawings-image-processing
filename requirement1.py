@@ -320,4 +320,6 @@ def execute():
         drawing_num = "drawing_" + str(n) + ".png"
         ws[current_drawing] = drawing_number
         ws[current_data] = str(n)
+        print(str(n))
+        print(drawing_number)
         wb.save('DIP assignment.xlsx')
