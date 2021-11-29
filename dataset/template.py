@@ -14,11 +14,11 @@ from openpyxl import load_workbook
 
 tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-for x in range(1,21):
-    if x < 10:
-        img_num = str(0) + str(x)
+for abc in range(1,21):
+    if abc < 10:
+        img_num = str(0) + str(abc)
     else:
-        img_num = str(x)
+        img_num = str(abc)
     print(img_num)
     #read image
     img_number = img_num + ".png"
@@ -305,12 +305,13 @@ for x in range(1,21):
         wb = Workbook()
     else :
         wb = load_workbook('DIP assignment.xlsx')
+    print(drawing_number)
+    print(abc)
     ws = wb.active
     ws.title = "Drawing Number"
-    current_data = 'A' + str(x)
-    current_drawing = 'B' + str(x)
-    drawing_num = "drawing_" + str(x) + ".png"
+    current_data = 'A' + str(abc)
+    current_drawing = 'B' + str(abc)
+    drawing_num = "drawing_" + str(abc) + ".png"
     ws[current_drawing] = drawing_number
-    ws[current_data] = str(x)
+    ws[current_data] = str(abc)
     wb.save('DIP assignment.xlsx')
-    print(drawing_number)
