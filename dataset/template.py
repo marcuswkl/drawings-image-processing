@@ -14,11 +14,11 @@ from openpyxl import load_workbook
 
 tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-for abc in range(1,21):
-    if abc < 10:
-        img_num = str(0) + str(abc)
+for n in range(1,21):
+    if n < 10:
+        img_num = str(0) + str(n)
     else:
-        img_num = str(abc)
+        img_num = str(n)
     print(img_num)
     #read image
     img_number = img_num + ".png"
@@ -76,7 +76,7 @@ for abc in range(1,21):
         return distance_list, item_list
                 
     #make the text clearer
-    def clearText(img,it1,it2) :
+    def morphText(img,it1,it2) :
         sE = np.array([ [0,1,0],[1,1,1],[0,1,0] ])
         sE = sE.astype(np.uint8)
         rSE = np.rot90(sE,2)
@@ -138,7 +138,7 @@ for abc in range(1,21):
                                             break
         return data_list
         
-    img = clearText(img,3,2)
+    img = morphText(img,3,2)
     distance_list, item_list = dataToText(img)
     if len(distance_list) != 0:
         smallest_distance = min(distance_list)
@@ -161,7 +161,7 @@ for abc in range(1,21):
         
         img2 = img_extra.copy()
         #make the text clearer
-        img2 = clearText(img2,1,2)
+        img2 = morphText(img2,1,2)
         
         #turn the data into text
         boxes = tess.image_to_data(img2) 
@@ -213,23 +213,18 @@ for abc in range(1,21):
         img3 = removeHori(img3)
         
         img3 = removeLongVerti(img3)
-            
-        cv2.imwrite("result.png", img3)
         
-        img_extra = cv2.imread('result.png')
+        img_extra = img3
         img3 = img_extra.copy()
         gray = cv2.cvtColor(img_extra, cv2.COLOR_BGR2GRAY)
         thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         
         img3 = removeShortVerti(img3)
-            
-        cv2.imwrite("thresh.png", thresh)
-        cv2.imwrite("result.png", img3)
         
         #get the height and width of img3_ori
         hImg,wImg,nlayer = img3.shape
             
-        img3 = clearText(img3,3,2)
+        img3 = morphText(img3,3,2)
         
         data_list = dataToText2(img3)
         
@@ -261,18 +256,13 @@ for abc in range(1,21):
         
         img4 = removeHori(img4)
         img4 = removeLongVerti(img4)
-            
-        cv2.imwrite("result.png", img4)
         
-        image4 = cv2.imread('result.png')
+        image4 = img4
         img4 = image4.copy()
         gray = cv2.cvtColor(image4, cv2.COLOR_BGR2GRAY)
         thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         
         img4 = removeShortVerti(img4)
-            
-        cv2.imwrite("thresh.png", thresh)
-        cv2.imwrite("result.png", img4)
         
         #crop the drawing
         img4 = img4[2172:2396,1582:2371]
@@ -306,12 +296,12 @@ for abc in range(1,21):
     else :
         wb = load_workbook('DIP assignment.xlsx')
     print(drawing_number)
-    print(abc)
+    print(n)
     ws = wb.active
     ws.title = "Drawing Number"
-    current_data = 'A' + str(abc)
-    current_drawing = 'B' + str(abc)
-    drawing_num = "drawing_" + str(abc) + ".png"
+    current_data = 'A' + str(n)
+    current_drawing = 'B' + str(n)
+    drawing_num = "drawing_" + str(n) + ".png"
     ws[current_drawing] = drawing_number
-    ws[current_data] = str(abc)
+    ws[current_data] = str(n)
     wb.save('DIP assignment.xlsx')
