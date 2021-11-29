@@ -6,16 +6,9 @@
 # 3. Seow Yee Ying 18047449
 # 4. Thum Yong Jie 19023233
 
-import numpy as np
-import cv2
-from matplotlib import pyplot as pt
-import pytesseract as ptsr
-import openpyxl as px
 import requirement1
 import requirement2
 import requirement3
-
-ptsr.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 # Requirement 1
 # Able to identify and extract the drawing number (e.g. SU BOL E 01 27 09 10 B) from the set of engineering drawings given to you and save them into an Excel file.
