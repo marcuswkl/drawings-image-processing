@@ -14,15 +14,17 @@ from openpyxl import load_workbook
 
 tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
+#loop through all 20 image
 for n in range(1,21):
     if n < 10:
         img_num = str(0) + str(n)
     else:
         img_num = str(n)
-    print(img_num)
+    
     #read image
     img_number = img_num + ".png"
     img_extra = cv2.imread(img_number, cv2.IMREAD_GRAYSCALE)
+    
     #convert image to grayscale
     thresh = 128
     img = cv2.threshold(img_extra, thresh, 255, cv2.THRESH_BINARY)[1]
@@ -44,7 +46,8 @@ for n in range(1,21):
         hypotenuse = np.sqrt(np.power(legX,2) + np.power(legY,2))
         return hypotenuse
     
-    #turn the data into text
+    #turn the data into text, loop through all data and find the distance between 'NUMBER' text and 
+    #also each data in the list and save them into a list
     def dataToText(img) :
         boxes = tess.image_to_data(img) 
         distance = 0
@@ -75,7 +78,7 @@ for n in range(1,21):
                                             distance_list.append(distance)
         return distance_list, item_list
                 
-    #make the text clearer
+    #make the text more readable
     def morphText(img,it1,it2) :
         sE = np.array([ [0,1,0],[1,1,1],[0,1,0] ])
         sE = sE.astype(np.uint8)
@@ -84,37 +87,40 @@ for n in range(1,21):
         img = cv2.dilate(img,rSE,iterations=it2)
         return img
     
-    # Remove horizontal lines
+    #remove horizontal lines
+    #idea obtained from website
     def removeHori(img3):
         horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (40,1))
-        remove_horizontal = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, horizontal_kernel, iterations=2)
-        cnts = cv2.findContours(remove_horizontal, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-        for c in cnts:
+        remove_horizontal = cv2.morphologyEx(threshImg, cv2.MORPH_OPEN, horizontal_kernel, iterations=2)
+        contoursImg = cv2.findContours(remove_horizontal, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contoursImg = contoursImg[0] if len(contoursImg) == 2 else contoursImg[1]
+        for c in contoursImg:
             cv2.drawContours(img3, [c], -1, (255,255,255), 5)
         return img3
 
-    # Remove vertical lines
+    #remove long vertical lines
+    #idea obtained from website
     def removeLongVerti(img3):
         vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1,40))
-        remove_vertical = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, vertical_kernel, iterations=2)
-        cnts = cv2.findContours(remove_vertical, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-        for c in cnts:
+        remove_vertical = cv2.morphologyEx(threshImg, cv2.MORPH_OPEN, vertical_kernel, iterations=2)
+        contoursImg = cv2.findContours(remove_vertical, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contoursImg = contoursImg[0] if len(contoursImg) == 2 else contoursImg[1]
+        for c in contoursImg:
             cv2.drawContours(img3, [c], -1, (255,255,255), 5)
         return img3
 
-    # Remove vertical lines
+    #remove short vertical lines
+    #idea obtained from website
     def removeShortVerti(img3):
         vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1,20))
-        remove_vertical = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, vertical_kernel, iterations=2)
-        cnts = cv2.findContours(remove_vertical, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-        for c in cnts:
+        remove_vertical = cv2.morphologyEx(threshImg, cv2.MORPH_OPEN, vertical_kernel, iterations=2)
+        contoursImg = cv2.findContours(remove_vertical, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contoursImg = contoursImg[0] if len(contoursImg) == 2 else contoursImg[1]
+        for c in contoursImg:
             cv2.drawContours(img3, [c], -1, (255,255,255), 5)
         return img3
     
-    #turn the data into text
+    #turn the data into text, add all text into a list
     def dataToText2(img):
         boxes = tess.image_to_data(img) 
         data_list = []
@@ -138,8 +144,11 @@ for n in range(1,21):
                                             break
         return data_list
         
+    #first condition: data are not bounded by text
     img = morphText(img,3,2)
     distance_list, item_list = dataToText(img)
+    
+    #find them item with the smallest distance to "NUMBER"
     if len(distance_list) != 0:
         smallest_distance = min(distance_list)
         index = distance_list.index(smallest_distance)
@@ -156,14 +165,15 @@ for n in range(1,21):
             smallest_distance = min(distance_list)
             index = distance_list.index(smallest_distance)
             drawing_number = item_list[index]
-        
+    
+    #second condition: for image 06.png
+    #different morphological operation iteration only
     if((drawing_number.isalpha()) or (drawing_number.isnumeric()) or (len(drawing_number) < 15)):
         
         img2 = img_extra.copy()
         #make the text clearer
         img2 = morphText(img2,1,2)
         
-        #turn the data into text
         boxes = tess.image_to_data(img2) 
         distance = 0
         distance_list = []
@@ -202,13 +212,16 @@ for n in range(1,21):
                             smallest_distance = min(distance_list)
                             index = distance_list.index(smallest_distance)
                             drawing_number = item_list[index]
-            
+    
+    #third condition: text is surrounded by boxes
     if((drawing_number.isalpha()) or (drawing_number.isnumeric()) or (len(drawing_number) < 15)):
         
+        #use thresholding to get the binary version of the image
+        #idea obtained from website
         img_extra = cv2.imread(img_number)
         img3 = img_extra.copy()
         gray = cv2.cvtColor(img_extra, cv2.COLOR_BGR2GRAY)
-        thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+        threshImg = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         
         img3 = removeHori(img3)
         
@@ -217,17 +230,19 @@ for n in range(1,21):
         img_extra = img3
         img3 = img_extra.copy()
         gray = cv2.cvtColor(img_extra, cv2.COLOR_BGR2GRAY)
-        thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+        threshImg = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         
         img3 = removeShortVerti(img3)
         
-        #get the height and width of img3_ori
+        #get the height and width of img
         hImg,wImg,nlayer = img3.shape
             
         img3 = morphText(img3,3,2)
         
         data_list = dataToText2(img3)
         
+        #find the drawing number data by starting after getting 'DRAWING NUMBER'
+        #and end when the data list is more than a certain number and ends with an alphabet
         for x,b in enumerate(data_list):
             if((b == 'DRAWING') or (b == 'DRAWING:')):
                 if((data_list[x+1] == 'NUMBER:') or (data_list[x+1] == 'NO.:') or (data_list[x+1] == 'NO.::') or (data_list[x+1] == 'NO:')):
@@ -245,14 +260,15 @@ for n in range(1,21):
                 break
             
         drawing_number = '.'.join([str(elem) for elem in drawing_number_list])
-
+    
+    #fourth condition: only image 17.png because text is read horizontally and messed up
     if((drawing_number.isalpha()) or (drawing_number.isnumeric()) or (len(drawing_number) < 15) or (len(drawing_number) > 25)):
     
         #convert image4 to grayscale
         image4 = cv2.imread(img_number)
         img4 = image4.copy()
         gray = cv2.cvtColor(image4, cv2.COLOR_BGR2GRAY)
-        thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+        threshImg = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         
         img4 = removeHori(img4)
         img4 = removeLongVerti(img4)
@@ -260,11 +276,11 @@ for n in range(1,21):
         image4 = img4
         img4 = image4.copy()
         gray = cv2.cvtColor(image4, cv2.COLOR_BGR2GRAY)
-        thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+        threshImg = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         
         img4 = removeShortVerti(img4)
         
-        #crop the drawing
+        #crop the drawing to get the specific area only
         img4 = img4[2172:2396,1582:2371]
         
         #get the height and width of image4
@@ -295,8 +311,6 @@ for n in range(1,21):
         wb = Workbook()
     else :
         wb = load_workbook('DIP assignment.xlsx')
-    print(drawing_number)
-    print(n)
     ws = wb.active
     ws.title = "Drawing Number"
     current_data = 'A' + str(n)
