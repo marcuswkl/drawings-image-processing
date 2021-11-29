@@ -16,8 +16,6 @@ img_ori = cv2.imread("01.png", cv2.IMREAD_GRAYSCALE)
 thresh = 128
 img = cv2.threshold(img_ori, thresh, 255, cv2.THRESH_BINARY)[1]
 
-img_contours = img.copy()
-
 hImg,wImg = img.shape
 
 for columns in range(5,wImg):
@@ -51,8 +49,6 @@ img_ori = cv2.imread("04.png", cv2.IMREAD_GRAYSCALE)
 
 thresh = 128
 img = cv2.threshold(img_ori, thresh, 255, cv2.THRESH_BINARY)[1]
-
-img_contours = img.copy()
 
 hImg,wImg = img.shape
     
@@ -88,8 +84,6 @@ img_ori = cv2.imread("06.png", cv2.IMREAD_GRAYSCALE)
 
 thresh = 128
 img = cv2.threshold(img_ori, thresh, 255, cv2.THRESH_BINARY)[1]
-
-img_contours = img.copy()
 
 hImg,wImg = img.shape
 
