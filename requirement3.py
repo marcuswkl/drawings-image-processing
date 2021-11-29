@@ -111,3 +111,23 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 
 cv2.imwrite("drawing_extracted.png", drawing)
+
+#--------------------extract drawing 20--------------------
+
+import cv2
+import pytesseract
+import numpy as np
+import matplotlib.pyplot as plt
+
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe'
+
+img = cv2.imread("20.png", 0)
+
+img [1547:2050, 180:1000] = 255
+final = img[258:, 0:2363]
+
+cv2.imshow("Drawing 20", final)
+cv2.waitKey()
+cv2.destroyAllWindows()
+
+cv2.imwrite("drawing20.png", final)
